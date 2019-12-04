@@ -1,9 +1,150 @@
 <!DOCTYPE html>
 <html lang="en">
     <head>
-        <title>DELI-VERY</title>
+      <title>Sannas Fantastic Burgers</title>
+      <meta charset="utf-8"/>
+      <script src="https://vuejs.org/js/vue.min.js"></script>
+      <script src="/socket.io/socket.io.js" defer></script>
+      <script src="js/vue_script.js" defer></script>
+      <script src="js/js_script.js" defer></script>
+      <script type="text/javascript" src="js/menu.js"></script>
+      <link rel="stylesheet" type="text/css" href="css/style.css">
+      <meta name="viewport" content="width=device-width, initial-scale=1">
+      <link rel="stylesheet" href="css/deli-very.css">
+      <script src="/vue/vue.min.js" defer></script>
     </head>
+
     <body>
-        <h1>Hello World!!!</h1>
+        <main>
+          <div id="vue">
+          <header class="header">
+            <img src="img/header_burger.jpeg" id="imgheader">
+            <h1 id="headline">Welcome to Sannas Fantastic Burgers</h1>
+          </header>
+          <section>
+              <h3>Select a burger</h4>
+              <p> This is where you execute burger selection </p><br>
+              <div class= "burgerinfo">
+                <div v-for = "burger in burgers" class = "chosenBurger">
+                  <h4>{{burger.productName}}</h4>
+                  <img :src = burger.img> 
+                  <ul>
+                    <li>{{burger.kCal}} kCal</li>
+                    <li v-if = "burger.gluten">Contains gluten</li>
+                    <li v-if = "burger.lactose">Contains lactose</li>
+                    <input type="checkbox" id="checkbox" v-model="checkbox" v-bind:value="burger.productName">Add burger<br>
+                  </ul>
+                </div>
+              </div>
+
+
+                <!--<div class="column">
+                  <span class="titela">The Fire Burger</span>
+                  <img src="img/burger_fire.jpeg" alt="The Fire Burger" title="The Fire Burger" class="picturea">
+                  <ul class="lista">
+                    <li> Hamburger with<span class="ingredients"> chili sauce</span></li>
+                    <li>Contains <span class="ingredients">lactose</span></li>
+                    <li>Contains <span class="ingredients">gluten</span></li>
+                  </ul>
+                </div>
+                <div class="column">
+                  <span class="titelb">Halloumi Burger</span>
+                  <img src="img/burger_halloumi.jpeg" alt="Halloumi Burger" title="The Halloumi Burger" class="pictureb">
+                  <ul class="listb">
+                    <li>Halloumi burger</li>
+                    <li>Contains <span class="ingredients">lactose</span></li>
+                    <li>Contains <span class="ingredients">gluten</span></li>
+                    <li>Vegetarian</li>
+                  </ul>
+                </div>
+                <div class="column">
+                  <span class="titelc">Falafel Burger</span>
+                  <img src="img/falafel_burger.jpeg" alt="Falafel Burger" title="The Halloumi Burger" class="picturec">
+                  <ul class="listc">
+                    <li>Falafel burger</li>
+                    <li>Contains <span class="ingredients">gluten</span></li>
+                    <li>Vegan</li>
+                  </ul>
+                </div>
+              </div>
+            </div>-->
+
+            </section>
+
+            <section id = "customerinfo">
+              <div>
+              <h3>Customer information</h4>
+              <p> This is where you provide necessary information </p>
+              <h4> Delivery information:</h4>
+              <form>
+                <p>
+                  <label for="fullname">Full name</label><br>
+                  <input type="text" id="fullname" name="name" required="required" placeholder="Full name">
+                </p>
+                <p>
+                  <label for="email">E-mail</label><br>
+                  <input type="text" id="email" name="email" required="required" placeholder="E-mail address">
+                </p>
+                <p>
+                  <!--<label for="street">Street</label><br>
+                  <input type="text" id="street" name="street" required="required" placeholder="Street name">
+                </p>
+                <p>
+                  <label for="house">House number</label><br>
+                  <input type="text" id="house" name="house" required="required" placeholder="House number">
+                </p>-->
+                <p>
+                  <label for="paymentoptions">Payment options</label><br>
+                  <select id="paymentoptions" name="pymtoptions">
+                    <option>Credit card</option>
+                    <option>Paypal</option>
+                    <option>Bank transfer</option>
+                    <option>Swish</option>
+                  </select>
+                </p>
+                <p>
+                  <label for="gender">Gender</label><br>
+                  <input type="radio" id="gender" name="gender" value="female">Female<br>
+                  <input type="radio" id="gender" name="gender" value="male">Male<br>
+                  <input type="radio" id="gender" checked="checked" name="gender" value="donotwishtoprovide">Do not wish to provide<br>
+                </p>
+              </form>
+            </div>
+            </section>
+
+            <section>
+            <h3>Click on the map</h3>
+            <a href="/dispatcher" target="_blank">Open dispatcher in new window</a>.
+            <div class="view-box">
+              <div id="dots" v-on:click="displayOrder">
+                <div
+                v-for = "(order, key) in orders"
+                v-bind:style="{ left: order.details.x + 'px', top: order.details.y + 'px'}">
+                T
+                </div>
+              </div>
+            </div>
+            <button type="submit" id = "orderButton" v-on:click = "addOrder" ><img src="img/place_order.jpeg" height="20" width="20">Place my order!</button>
+          <br>
+          <div v-if = "completeorder">
+            <h4>Customer information:</h4>
+            <ul>
+              <li>Name: {{customerinfo[0]}}</li>
+              <li>E-mail: {{customerinfo[1]}}</li>
+              <li>Street: {{customerinfo[2]}}</li>
+              <li>House number: {{customerinfo[3]}}</li>
+              <li>Chosen payment method: {{customerinfo[4]}}</li>
+              <li>Gender: {{customerinfo[5]}}</li>
+            </ul>
+          </div>
+          <h4>This is your order:</h4>
+          <div v-for = "obj in customerinfo">
+            {{obj}}
+          </div>
+        </main>
+        <footer>
+          <hr>
+          <p>&copy; Sannas Burgers Inc</p>
+        </footer>
     </body>
 </html>
